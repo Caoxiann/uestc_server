@@ -74,6 +74,7 @@ def get_score():
         resp.status_code = 202
         return resp
 
+if __name__ == '__main__':
+    app.run('0.0.0.0', '6060')
 
-app.run('0.0.0.0', '6060')
 
