@@ -118,7 +118,7 @@ def step1(login_session, source_text, semesterid):
 def course_info(login_session, ids, semesterid=None):
     url = 'http://eams.uestc.edu.cn/eams/courseTableForStd!courseTable.action?ignoreHead=1&setting.kind=std&startWeek=1&semester.id=' + str(semesterid) + '&ids=' + str(ids);
     resp = login_session.get(url)
-
+    print(resp.text)
     courses = []
     for match in course_pattern.finditer(resp.text):
         course = {}
