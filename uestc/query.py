@@ -118,23 +118,22 @@ def step1(login_session, source_text, semesterid):
 def course_info(login_session, ids, semesterid=None):
     url = 'http://eams.uestc.edu.cn/eams/courseTableForStd!courseTable.action?ignoreHead=1&setting.kind=std&startWeek=1&semester.id=' + str(semesterid) + '&ids=' + str(ids);
     resp = login_session.get(url)
-    print(resp.text)
     courses = []
     for match in course_pattern.finditer(resp.text):
         course = {}
-        info = info_pattern.search(match[1])
-        courseid = re.findall(r'[^()]+', info[4])[1]
-        course_name = re.sub('\(.*?\)', '', info[4])
-        course['teacher_id'] = info[1]
-        course['teacher_name'] = info[2]
+        info = info_pattern.search(match.group(1))
+        courseid = re.findall(r'[^()]+', info.group(4))[1]
+        course_name = re.sub('\(.*?\)', '', info.group(4))
+        course['teacher_id'] = info.group(1)
+        course['teacher_name'] = info.group(1)
         course['course_id'] = courseid
         course['course_name'] = course_name
-        course['room_id'] = info[5]
-        course['room_name'] = info[6]
-        course['weeks'] = tuple(i for i, v in enumerate(info[7]) if v == '1')
+        course['room_id'] = info.group(5)
+        course['room_name'] = info.group(6)
+        course['weeks'] = tuple(i for i, v in enumerate(info.group(7)) if v == '1')
         course['time'] = []
-        time = time_pattern.findall(match[2])
-        for weekday, clss in time:
+        t = time_pattern.findall(match.group(2))
+        for weekday, clss in t:
             course['time'].append((int(weekday) + 1, int(clss) + 1))
         courses.append(course)
     return courses
