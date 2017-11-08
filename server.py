@@ -74,6 +74,28 @@ def get_score():
         resp.status_code = 202
         return resp
 
+
+@app.route('/getallscore', methods=['GET'])
+def get_all_socre():
+    if 'username' in request.args:
+        username = request.args.get('username')
+        login_session = uestc_sessions.get(username)
+        if login_session:
+            scores = uestc.query.get_all_socre(login_session, username)
+            if scores:
+                return jsonify(scores)
+            else:
+                return "Error occur when getting score.", 201, {'content-type': 'text/html'}
+        else:
+            resp = make_response('Please login again.')
+            resp.status_code = 202
+            return resp
+    else:
+        resp = make_response('Please login again.')
+        resp.status_code = 202
+        return resp
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', '6060')
 

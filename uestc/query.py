@@ -12,6 +12,7 @@ info_pattern = re.compile(r'"(.*?)",?' * 7)
 time_pattern = re.compile(r'index =(\d+)\*unitCount\+(\d+);')
 name_pattern = re.compile('.*\(([^)]*)\)')
 
+
 def __get_mid_text(text, left_text, right_text, start=0):
     """获取中间文本"""
     left = text.find(left_text, start)
@@ -45,6 +46,24 @@ def get_score(login_session, semester):
             ret[i][j] = ret[i][j].string
 
     return ret
+
+
+def get_all_socre(login_session, userid):
+    semesters = get_semesterid_data(login_session)
+    now_semesid = get_now_semesterid(login_session)
+    now_semes = None
+    for key, value in semesters.items():
+        if value == now_semesid:
+            now_semes = key
+    fresh_year = int(userid[:4])
+    count = 0
+    scores = []
+    while fresh_year < int(now_semes[:4]):
+        semes = str(fresh_year) + '-' + str(fresh_year + 1) + '-' + str((count % 2) + 1)
+        fresh_year += (count % 2)
+        count += 1
+        scores.append(get_score(login_session, semes))
+    return scores
 
 
 def get_now_semesterid(login_session):
