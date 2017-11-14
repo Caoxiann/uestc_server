@@ -141,10 +141,11 @@ def course_info(login_session, ids, semesterid=None):
     for match in course_pattern.finditer(resp.text):
         course = {}
         info = info_pattern.search(match.group(1))
+        print(info.groups())
         courseid = re.findall(r'[^()]+', info.group(4))[1]
         course_name = re.sub('\(.*?\)', '', info.group(4))
         course['teacher_id'] = info.group(1)
-        course['teacher_name'] = info.group(1)
+        course['teacher_name'] = info.group(2)
         course['course_id'] = courseid
         course['course_name'] = course_name
         course['room_id'] = info.group(5)

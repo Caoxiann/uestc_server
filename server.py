@@ -91,6 +91,7 @@ def get_all_socre():
             resp.status_code = 202
             return resp
     else:
+        print(uestc_sessions)
         resp = make_response('Please login again.')
         resp.status_code = 202
         return resp
