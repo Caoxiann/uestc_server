@@ -16,7 +16,9 @@ def login():
     username = data.get('username')
     passwd = data.get('passwd')
     print(username, passwd)
-    login_session = uestc.login(username, passwd)
+    d = uestc.login(username, passwd)
+    login_session = d["session"]
+    name = d["name"]
 
     if login_session == 201 or login_session == 202:
         resp = make_response()
@@ -25,7 +27,7 @@ def login():
     else:
         session['username'] = username
         uestc_sessions[username] = login_session
-        resp = make_response('Login success.')
+        resp = make_response(name)
         resp.status_code = 200
         return resp
 

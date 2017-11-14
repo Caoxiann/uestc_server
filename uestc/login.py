@@ -2,6 +2,7 @@
 """电子科技大学登陆模块"""
 import requests
 from .exceptions import LoginError
+import re
 
 
 def __get_mid_text(text, left_text, right_text, start=0):
@@ -41,6 +42,11 @@ def login(num, password):
         'rmShown': '1'
     }
     response = new_session.post(url, data=postdata)
+    name = "Unknow"
+    if "auth_username" in response.text:
+        name = re.search('auth_username.*?</span>', response.text, re.DOTALL).group(0)
+        name = re.search('<span>(.*)', name, re.DOTALL).group(1)
+        name = re.search('<span>(.*)</span>', name, re.DOTALL).group(1).replace('\t', '').replace('\n', '').replace(' ', '')
     if '密码有误' in response.text:
         print('密码错误')
         return 201
@@ -53,4 +59,5 @@ def login(num, password):
     if '踢出' in response.text:
         click_url = __get_mid_text(response.text, '请<a href="', '"')
         new_session.get(click_url[0])
-    return new_session
+
+    return {"session": new_session, "name": name}
