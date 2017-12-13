@@ -119,10 +119,8 @@ def get_course(login_session, semester=None):
         semester_id = get_now_semesterid(login_session)
 
     time_stamp = time.time()
-    print(int(round(time_stamp * 1000)))
     url = 'http://eams.uestc.edu.cn/eams/courseTableForStd.action?_=' + str(time_stamp)
     resp = login_session.get(url)
-    # print(resp.text)
     return step1(login_session, resp.text, semester_id)
 
 
@@ -141,7 +139,6 @@ def course_info(login_session, ids, semesterid=None):
     for match in course_pattern.finditer(resp.text):
         course = {}
         info = info_pattern.search(match.group(1))
-        print(info.groups())
         courseid = re.findall(r'[^()]+', info.group(4))[1]
         course_name = re.sub('\(.*?\)', '', info.group(4))
         course['teacher_id'] = info.group(1)

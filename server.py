@@ -15,7 +15,6 @@ def login():
     data = request.json
     username = data.get('username')
     passwd = data.get('passwd')
-    print(username, passwd)
     d = uestc.login(username, passwd)
     login_session = d["session"]
     name = d["name"]
@@ -93,7 +92,6 @@ def get_all_socre():
             resp.status_code = 202
             return resp
     else:
-        print(uestc_sessions)
         resp = make_response('Please login again.')
         resp.status_code = 202
         return resp
