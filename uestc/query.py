@@ -12,6 +12,20 @@ info_pattern = re.compile(r'"(.*?)",?' * 7)
 time_pattern = re.compile(r'index =(\d+)\*unitCount\+(\d+);')
 name_pattern = re.compile('.*\(([^)]*)\)')
 
+semesterid_list = {
+    "2008-2009-1": "21", "2008-2009-2": "22",
+    "2009-2010-1": "19", "2009-2010": "20",
+    "2010-2011-1": "17", "2010-2011": "18",
+    "2011-2012-1": "15", "2011-2012": "16",
+    "2012-2013-1": "13", "2012-2013": "14",
+    "2013-2014-1": "1", "2013-2014": "2",
+    "2014-2015-1": "43", "2014-2015": "63",
+    "2015-2016-1": "84", "2015-2016": "103",
+    "2016-2017-1": "123", "2016-2017": "143",
+    "2017-2018-1": "163", "2017-2018": "183",
+    "2018-2019-1": "203",
+}
+
 
 def __get_mid_text(text, left_text, right_text, start=0):
     """获取中间文本"""
@@ -114,7 +128,7 @@ def get_semesterid_data(login_session):
 
 def get_course(login_session, semester=None):
     if semester:
-        semester_id = get_semesterid_data(login_session).get(semester)
+        semester_id = semesterid_list.get(semester)
     else:
         semester_id = get_now_semesterid(login_session)
 
