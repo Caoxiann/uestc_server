@@ -14,15 +14,15 @@ name_pattern = re.compile('.*\(([^)]*)\)')
 
 semesterid_list = {
     "2008-2009-1": "21", "2008-2009-2": "22",
-    "2009-2010-1": "19", "2009-2010": "20",
-    "2010-2011-1": "17", "2010-2011": "18",
-    "2011-2012-1": "15", "2011-2012": "16",
-    "2012-2013-1": "13", "2012-2013": "14",
-    "2013-2014-1": "1", "2013-2014": "2",
-    "2014-2015-1": "43", "2014-2015": "63",
-    "2015-2016-1": "84", "2015-2016": "103",
-    "2016-2017-1": "123", "2016-2017": "143",
-    "2017-2018-1": "163", "2017-2018": "183",
+    "2009-2010-1": "19", "2009-2010-2": "20",
+    "2010-2011-1": "17", "2010-2011-2": "18",
+    "2011-2012-1": "15", "2011-2012-2": "16",
+    "2012-2013-1": "13", "2012-2013-2": "14",
+    "2013-2014-1": "1", "2013-2014-2": "2",
+    "2014-2015-1": "43", "2014-2015-2": "63",
+    "2015-2016-1": "84", "2015-2016-2": "103",
+    "2016-2017-1": "123", "2016-2017-2": "143",
+    "2017-2018-1": "163", "2017-2018-2": "183",
     "2018-2019-1": "203",
 }
 
@@ -45,8 +45,7 @@ def get_score(login_session, semester):
     返回一个list的嵌套
     格式为
     [[学年学期,课程代码,课程序号,课程名称,课程类别,学分,总评成绩,补考总评,最终,绩点]]"""
-    semesterid_data = get_semesterid_data(login_session)
-    response = login_session.get('http://eams.uestc.edu.cn/eams/teach/grade/course/person!search.action?semesterId=%d' % semesterid_data[semester])
+    response = login_session.get('http://eams.uestc.edu.cn/eams/teach/grade/course/person!search.action?semesterId=%d' % int(semesterid_list[semester]))
     soup = BeautifulSoup(response.text, 'html.parser')
     result = soup.find_all('td')
     ret = []
@@ -63,11 +62,10 @@ def get_score(login_session, semester):
 
 
 def get_all_socre(login_session, userid):
-    semesters = get_semesterid_data(login_session)
     now_semesid = get_now_semesterid(login_session)
     now_semes = None
-    for key, value in semesters.items():
-        if value == now_semesid:
+    for key, value in semesterid_list.items():
+        if int(value) == now_semesid:
             now_semes = key
     fresh_year = int(userid[:4])
     count = 0
