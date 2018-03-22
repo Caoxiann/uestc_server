@@ -70,10 +70,12 @@ def get_all_socre(login_session, userid):
     fresh_year = int(userid[:4])
     count = 0
     scores = []
-    while fresh_year < int(now_semes[:4]):
+    while fresh_year <= int(now_semes[:4]):
         semes = str(fresh_year) + '-' + str(fresh_year + 1) + '-' + str((count % 2) + 1)
         fresh_year += (count % 2)
         count += 1
+        if semes == now_semes:
+            break
         scores.append(get_score(login_session, semes))
     return scores
 
